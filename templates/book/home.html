@@ -1,0 +1,180 @@
+{% extends "base.html" %}
+
+
+
+{% block title %}PseudoRCTC{% endblock %}
+
+
+{% block body %}
+<header class="w3-display-container w3-content w3-hide-small" style="max-width:1500px">
+    <img class="w3-image" src="https://www.w3schools.com/w3images/london2.jpg" alt="London" width="1500" height="700">
+    <div class="w3-display-middle" style="width:65%">
+        <div class="w3-bar w3-black">
+            <button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Flight');"><i
+                        class="fa fa-plane w3-margin-right"></i>Book
+            </button>
+            <button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Hotel');"><i
+                        class="fa fa-bed w3-margin-right"></i>On Map
+            </button>
+            <button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Car');"><i
+                        class="fa fa-car w3-margin-right"></i>Rental
+            </button>
+        </div>
+
+        <!-- Tabs -->
+        <div id="Flight" class="w3-container w3-white w3-padding-16 myLink">
+            <h3>Travel the world with us</h3>
+            <form class="searchForm" action="{% url 'book:search' %}" method="post">
+                {% csrf_token %}
+                <div class="w3-row-padding" style="margin:0 -16px;">
+                    <div class="w3-half">
+                        <label>From</label>
+                        <input class="w3-input w3-border" type="text" placeholder="Departing from" name="source">
+                    </div>
+                    <div class="w3-half">
+                        <label>To</label>
+                        <input class="w3-input w3-border" type="text" placeholder="Arriving at" name="dest">
+                    </div>
+                </div>
+                <p>
+                    <input class="w3-button w3-dark-grey" type="submit" value="Search and find dates">
+                </p>
+            </form>
+        </div>
+
+        <div id="Hotel" class="w3-container w3-white w3-padding-16 myLink">
+            <h3 style="text-align: center;">Route A</h3>
+            <div class="flex-parent testimonial-group">
+                <div class="input-flex-container row text-center" style="width: 100%; height: 60%">
+                    <div class="input">
+                        <span data-year="1910" data-info="headset"></span>
+                    </div>
+                    <div class="input">
+                        <span data-year="1920" data-info="jungle gym"></span>
+                    </div>
+                    <div class="input">
+                        <span data-year="1930" data-info="chocolate chip cookie"></span>
+                    </div>
+                    <div class="input">
+                        <span data-year="1940" data-info="Jeep"></span>
+                    </div>
+                    <div class="input">
+                        <span data-year="1950" data-info="leaf blower"></span>
+                    </div>
+                    <div class="input">
+                        <span data-year="1960" data-info="magnetic stripe card"></span>
+                    </div>
+                    <div class="input">
+                        <span data-year="1970" data-info="wireless LAN"></span>
+                    </div>
+                    <div class="input">
+                        <span data-year="1980" data-info="flash memory"></span>
+                    </div>
+                    <div class="input">
+                        <span data-year="1990" data-info="World Wide Web"></span>
+                    </div>
+                    <div class="input">
+                        <span data-year="2000" data-info="Google AdWords"></span>
+                    </div>
+                </div>
+                <button class="mapSearch w3-button w3-dark-grey">Search and find dates</button>
+            </div>
+
+        </div>
+
+        <div id="Car" class="w3-container w3-white w3-padding-16 myLink">
+            <h3>Best car rental in the world!</h3>
+            <p><span class="w3-tag w3-deep-orange">DISCOUNT!</span> Special offer if you book today: 25% off anywhere in
+                the world with CarServiceRentalRUs</p>
+            <input class="w3-input w3-border" type="text" placeholder="Pick-up point">
+            <p>
+                <button class="w3-button w3-dark-grey">Search Availability</button>
+            </p>
+        </div>
+    </div>
+</header>
+{% endblock %}
+
+{% block end-scripts %}
+<script>
+    var source = "";
+    var dest = "";
+
+    // Tabs
+    function openLink(evt, linkName) {
+        var i, x, tablinks;
+        x = document.getElementsByClassName("myLink");
+        for (i = 0; i < x.length; i++) {
+            x[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablink");
+        for (i = 0; i < x.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" w3-red", "");
+        }
+        document.getElementById(linkName).style.display = "block";
+        evt.currentTarget.className += " w3-red";
+    }
+
+    // Click on the first tablink on load
+    document.getElementsByClassName("tablink")[0].click();
+
+
+    $(function(){
+        var inputs = $('.input');
+        var paras = $('.description-flex-container').find('p');
+        var sflag = 0;
+        var dflag = 1;
+        $(inputs).click(function(){
+            if(sflag==0){
+                sflag=1;
+                source = this;
+                $(source).addClass("activeS");
+                $(inputs).not($(this)).add($(paras).not(this)).removeClass('activeS');
+                dflag=0;
+            }
+            else{
+                dflag=1;
+                dest = this;
+                $(dest).addClass("activeD");
+                $(inputs).not($(this)).add($(paras).not(this)).removeClass('activeD');
+                sflag=0;
+            }
+            // if(dflag)
+            //     console.log(source.firstElementChild.getAttribute("data-info")+" ," +  dest.firstElementChild.getAttribute("data-info"));
+
+
+
+            // $(this).addClass("active");
+
+            // console.log(this)
+            // var t = $(this),
+            //     ind = t.index(),
+            //     matchedPara = $(paras).eq(ind);
+            // console.log($(t).add(matchedPara)[0])
+            // $(t).add(matchedPara).addClass('active');
+
+        });
+    });
+
+    $(".mapSearch").click(function(){
+
+        if(source && dest){
+            query=$(".searchForm")[0];
+                    query['source'].value=source.firstElementChild.getAttribute("data-info");
+                    query['dest'].value=dest.firstElementChild.getAttribute("data-info");
+                    // console.log(query['source'].value);
+                    query.submit();
+
+        }
+        else {
+            if(!source && !dest){
+                alertMessage="Please select a source and a destination.";
+            }
+            else if(!dest){
+                alertMessage="Please select a destination.";
+            }
+            alert(alertMessage);
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% load staticfiles %}
+    {% load static %}
+    <title>{% block title %}PseudoRCTC{% endblock %}</title>
+	<link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
+	<link href="{% static 'css/bootstrap-theme.css' %}" rel="stylesheet">
+	<link href="{% static 'css/font-awesome.css' %}" rel="stylesheet">
+	<link href="{% static 'css/animate.css' %}" rel="stylesheet">
+	<link href="{% static 'css/materialize.css' %}" rel="stylesheet">
+    <link href="{% static 'css/main.css' %}" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <script src="{% static 'js/jquery-3.3.1.js' %}"></script>
+    <script src="{% static 'js/dateFormat.js' %}"></script>
+    <script src="{% static 'js/bootstrap.js' %}"></script>
+    <script src="{% static 'js/materialize.js' %}"></script>
+
+{% block extra-head %}
+{% endblock %}
+</head>
+<body class="w3-light-grey">
+
+{% block navbar %}
+<div class="w3-bar w3-white w3-border-bottom w3-xlarge">
+    <a href="{% url 'book:home' %}" class="w3-bar-item w3-button w3-text-red w3-hover-red"><b><i
+                    class="fa fa-map-marker w3-margin-right"></i>Logo</b></a>
+
+    {% block logout %}
+        {% if request.user != 'AnonymousUser' %}
+            <a class="w3-bar-item w3-button w3-text-red w3-hover-red" href="{% url 'accounts:logout' %}" style="float: right;">
+                <i class="fa fa-map-marker w3-margin-right fa-sign-out"></i>
+            </a>
+        {% endif %}
+    {% endblock %}
+</div>
+{% endblock %}
+
+{% block body %}
+{% endblock %}
+
+{% block footer %}
+    <footer class="w3-container w3-center w3-opacity w3-margin-bottom">
+    <h5>Find Us On</h5>
+    <div class="w3-xlarge w3-padding-16">
+        <i class="fa fa-facebook-official w3-hover-opacity"></i>
+        <i class="fa fa-instagram w3-hover-opacity"></i>
+        <i class="fa fa-snapchat w3-hover-opacity"></i>
+        <i class="fa fa-pinterest-p w3-hover-opacity"></i>
+        <i class="fa fa-twitter w3-hover-opacity"></i>
+        <i class="fa fa-linkedin w3-hover-opacity"></i>
+    </div>
+</footer>
+{% endblock %}
+{% block end-scripts %}
+{% endblock %}
+
+</body>
+</html>

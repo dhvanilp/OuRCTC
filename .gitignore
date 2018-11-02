@@ -2,4 +2,7 @@
 *.out
 *.zip
 .idea
-
+venv
+db.sqlite3
+accounts/migrations
+book/migrations
