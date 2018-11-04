@@ -6,6 +6,6 @@ app_name = 'book'
 
 urlpatterns = [
     path('',views.homeView,name="home"),
-    path('/search',views.searchView,name="search"),
+    path('search',views.searchView,name="search"),
 
 ]
