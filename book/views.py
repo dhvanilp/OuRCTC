@@ -38,19 +38,19 @@ def homeView(request):
     #     train.distance = data["distance"]
     #     print(train)
     #     train.save()
-
-    json_data = open('static/railways/schedules.json', 'r')
-    schedules = json.loads(json_data.read())
-    for data in schedules:
-        schedule = Schedule()
-        schedule.arrival = data["arrival"]
-        schedule.day = data["day"]
-        schedule.station = Station.objects.get(pk=data["station_code"])
-        schedule.train = Train.objects.get(pk=data["train_number"])
-        schedule.departure = data["departure"]
-        schedule.id = data["id"]
-        print(schedule.id)
-        schedule.save()
+    #
+    # json_data = open('static/railways/schedules.json', 'r')
+    # schedules = json.loads(json_data.read())
+    # for data in schedules:
+    #     schedule = Schedule()
+    #     schedule.arrival = data["arrival"]
+    #     schedule.day = data["day"]
+    #     schedule.station = Station.objects.get(pk=data["station_code"])
+    #     schedule.train = Train.objects.get(pk=data["train_number"])
+    #     schedule.departure = data["departure"]
+    #     schedule.id = data["id"]
+    #     print(schedule.id)
+    #     schedule.save()
 
     return render(request,'book/home.html')
 
