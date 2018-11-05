@@ -51,7 +51,22 @@ def homeView(request):
     #     schedule.id = data["id"]
     #     print(schedule.id)
     #     schedule.save()
-
+# 10103
+# 10104
+# 10111
+# 10112
+# 10215
+# 10216
+# 11003
+# 11004
+# 12051
+# 12052
+# 12133
+# 12134
+# 12223
+# 12224
+# 12619
+# 12620
     return render(request,'book/home.html')
 
 @login_required(login_url="/login")
