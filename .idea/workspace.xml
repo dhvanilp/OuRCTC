@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="0f661179-e52c-46a2-a0f4-f9e831127546" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/book/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db,json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
-    </list>
+    <list default="true" id="0f661179-e52c-46a2-a0f4-f9e831127546" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,6 +34,7 @@
     <session id="1600281294">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
+          <entry key="project.closed" value="1" />
           <entry key="project.open.time.101" value="1" />
           <entry key="project.open.time.60" value="1" />
           <entry key="project.open.time.76" value="1" />
@@ -66,7 +62,7 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="Django Console" value="3564" />
+          <entry key="Django Console" value="3601" />
           <entry key="css" value="1" />
           <entry key="gitignore" value="57" />
           <entry key="html" value="476" />
@@ -80,7 +76,7 @@
           <entry key="HTML" value="476" />
           <entry key="JSON" value="3" />
           <entry key="PLAIN_TEXT" value="57" />
-          <entry key="Python" value="6894" />
+          <entry key="Python" value="6931" />
         </counts>
       </usages-collector>
     </session>
@@ -120,7 +116,7 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/book/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="328">
+            <state relative-caret-position="476">
               <caret line="61" column="7" selection-start-line="61" selection-start-column="7" selection-end-line="61" selection-end-column="7" />
               <folding>
                 <element signature="e#0#35#0" expanded="true" />
@@ -366,8 +362,8 @@
       <window_info anchor="bottom" id="Version Control" order="8" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="9" weight="0.32903227" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5005365" side_tool="true" weight="0.32903227" />
-      <window_info anchor="bottom" id="Terminal" order="11" sideWeight="0.49892703" weight="0.32903227" />
-      <window_info active="true" anchor="bottom" id="Python Console" order="12" sideWeight="0.49892703" visible="true" weight="0.39139786" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="11" sideWeight="0.49892703" visible="true" weight="0.32903227" />
+      <window_info anchor="bottom" id="Python Console" order="12" sideWeight="0.49892703" weight="0.39139786" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -550,7 +546,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/book/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="328">
+        <state relative-caret-position="476">
           <caret line="61" column="7" selection-start-line="61" selection-start-column="7" selection-end-line="61" selection-end-column="7" />
           <folding>
             <element signature="e#0#35#0" expanded="true" />
