@@ -12,30 +12,39 @@
     <img class="w3-image" src="https://www.w3schools.com/w3images/london2.jpg" alt="London" width="1500" height="700">
     <div class="w3-display-middle" style="width:65%">
         <div class="w3-bar w3-black">
-            <button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Flight');"><i
+            <button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Search');"><i
                         class="fa fa-plane w3-margin-right"></i>Book
             </button>
-            <button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Hotel');"><i
+            <button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Map');"><i
                         class="fa fa-bed w3-margin-right"></i>On Map
-            </button>
-            <button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Car');"><i
-                        class="fa fa-car w3-margin-right"></i>Rental
             </button>
         </div>
 
         <!-- Tabs -->
-        <div id="Flight" class="w3-container w3-white w3-padding-16 myLink">
+        <div id="Search" class="w3-container w3-white w3-padding-16 myLink">
             <h3>Travel the world with us</h3>
-            <form class="searchForm" action="{% url 'book:search' %}" method="post">
+            <form class="searchForm" action="{% url 'book:search' %}" method="post" onsubmit=submitSearchForm()>
                 {% csrf_token %}
                 <div class="w3-row-padding" style="margin:0 -16px;">
                     <div class="w3-half">
                         <label>From</label>
-                        <input class="w3-input w3-border" type="text" placeholder="Departing from" name="source">
+                        <!--<input class="w3-input w3-border" type="text" placeholder="Departing from" name="source">-->
+                        <input class="w3-input w3-border" list="sources" name="source">
+                          <datalist id="sources">
+                              {% for s in stations %}
+                              <option value="{{ s.pk }}">{{ s }}</option>
+                              {% endfor %}
+                          </datalist>
                     </div>
                     <div class="w3-half">
                         <label>To</label>
-                        <input class="w3-input w3-border" type="text" placeholder="Arriving at" name="dest">
+                        <!--<input class="w3-input w3-border" type="text" placeholder="Arriving at" name="dest">-->
+                        <input class="w3-input w3-border" list="destinations" name="dest">
+                          <datalist id="destinations">
+                            {% for s in stations %}
+                                <option value="{{ s.pk }}">{{ s }}</option>
+                            {% endfor %}
+                          </datalist>
                     </div>
                 </div>
                 <p>
@@ -44,63 +53,41 @@
             </form>
         </div>
 
-        <div id="Hotel" class="w3-container w3-white w3-padding-16 myLink">
+        <div id="Map" class="w3-container w3-white w3-padding-16 myLink">
             <h3 style="text-align: center;">Route A</h3>
             <div class="flex-parent testimonial-group">
                 <div class="input-flex-container row text-center" style="width: 100%; height: 60%">
-                    <div class="input">
-                        <span data-year="1910" data-info="headset"></span>
-                    </div>
-                    <div class="input">
-                        <span data-year="1920" data-info="jungle gym"></span>
-                    </div>
-                    <div class="input">
-                        <span data-year="1930" data-info="chocolate chip cookie"></span>
-                    </div>
-                    <div class="input">
-                        <span data-year="1940" data-info="Jeep"></span>
-                    </div>
-                    <div class="input">
-                        <span data-year="1950" data-info="leaf blower"></span>
-                    </div>
-                    <div class="input">
-                        <span data-year="1960" data-info="magnetic stripe card"></span>
-                    </div>
-                    <div class="input">
-                        <span data-year="1970" data-info="wireless LAN"></span>
-                    </div>
-                    <div class="input">
-                        <span data-year="1980" data-info="flash memory"></span>
-                    </div>
-                    <div class="input">
-                        <span data-year="1990" data-info="World Wide Web"></span>
-                    </div>
-                    <div class="input">
-                        <span data-year="2000" data-info="Google AdWords"></span>
-                    </div>
+                    {% for s in st %}
+                        <div class="input">
+                            <span data-year="{{ s.name }}" data-info="{{ s.pk }}"></span>
+                        </div>
+                    {% endfor %}
+                    <!--<div class="input">-->
+                        <!--<span data-year="1920" data-info="jungle gym"></span>-->
+                    <!--</div>-->
                 </div>
                 <button class="mapSearch w3-button w3-dark-grey">Search and find dates</button>
             </div>
 
         </div>
 
-        <div id="Car" class="w3-container w3-white w3-padding-16 myLink">
-            <h3>Best car rental in the world!</h3>
-            <p><span class="w3-tag w3-deep-orange">DISCOUNT!</span> Special offer if you book today: 25% off anywhere in
-                the world with CarServiceRentalRUs</p>
-            <input class="w3-input w3-border" type="text" placeholder="Pick-up point">
-            <p>
-                <button class="w3-button w3-dark-grey">Search Availability</button>
-            </p>
-        </div>
     </div>
 </header>
 {% endblock %}
 
 {% block end-scripts %}
 <script>
-    var source = "";
-    var dest = "";
+
+    function submitSearchForm()
+    {
+        <!--event.preventDefault();-->
+        searchform = $(".searchForm")[0];
+        console.log(searchform["source"]);
+        searchForm.submit();
+    }
+
+    var source;
+    var dest;
 
     // Tabs
     function openLink(evt, linkName) {

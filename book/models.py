@@ -39,4 +39,4 @@ class Schedule(models.Model):
     departure = models.CharField("Arrival", max_length=8, null=True)
 
     def __str__(self):
-        return str(self.train) +"at"+str(self.station)
+        return str(self.train) +" at "+str(self.station)
