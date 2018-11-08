@@ -1,3 +1,5 @@
 .vscode
 *.out
 *.zip
+.idea
+
