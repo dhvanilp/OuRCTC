@@ -7,13 +7,23 @@
 {% block body %}
 <img class="w3-image" src="https://www.w3schools.com/w3images/london2.jpg" alt="London" width="1500" height="700">
 <div class="w3-display-middle" style="width:65%">
-    <div class="w3-container w3-white w3-padding-16">
+    <div class="w3-container w3-white w3-padding-16"  style="height: 500px; overflow-y: scroll;">
     <ul>
-        {% for t in trains %}
+        {% for train,sourceSchedule,destSchedule in schedules %}
         <div class="w3-container">
             <li>
-                {{ t }}
-                <button class="w3-button" style="float:right;">Book</button>
+                {{ train }}
+                <button class="w3-button" style="float:right;">Expand</button>
+                <div class="w3-container">
+                    <span>Departure:
+                    {% if sourceSchedule.departure %}
+                        {{ sourceSchedule.departure }}
+                    {% endif %}</span>
+                    <span>Arrival:
+                    {% if destSchedule.arrival %}
+                        {{ destSchedule.arrival }}
+                    {% endif %}</span>
+                </div>
             </li>
         </div>
         {% endfor %}

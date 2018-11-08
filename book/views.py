@@ -3,7 +3,6 @@ from django.contrib.auth.decorators import login_required
 from .models import *
 import json, time
 
-
 # Create your views here.
 
 @login_required(login_url="/login")
@@ -19,17 +18,31 @@ def homeView(request):
 def searchView(request):
     source = Station.objects.get(pk=request.POST['source'])
     dest = Station.objects.get(pk=request.POST['dest'])
-    sourceTrains = set(source.station_schedule.all())
-    destTrains = set(source.station_schedule.all())
+    sourceTrains = []
+    for s in source.station_schedule.all():
+        sourceTrains.append(s.train)
+    destTrains = []
+    for s in dest.station_schedule.all():
+        destTrains.append(s.train)
+    allTrains=list(set(sourceTrains) & set(destTrains))
+
     trains=[]
-    for t in list(sourceTrains and destTrains):
-        trains.append(t.train)
+    sourceSchedules=[]
+    destSchedules=[]
+    for t in allTrains:
+        departing_station = t.train_schedule.get(station=source)
+        arriving_station = t.train_schedule.get(station=dest)
+        if departing_station.pk < arriving_station.pk:
+            trains.append(t)
+            sourceSchedules.append(departing_station)
+            destSchedules.append(arriving_station)
 
 
+    schedules=zip(trains,sourceSchedules,destSchedules)
     data={
-        "source" : source,
-        "dest" : dest,
-        "trains" : trains,
+        "source": source,
+        "dest": dest,
+        "schedules":schedules
     }
     return render(request,'book/trainSearch.html',data)
 

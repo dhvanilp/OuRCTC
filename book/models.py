@@ -36,7 +36,16 @@ class Schedule(models.Model):
     train = models.ForeignKey(Train, on_delete=models.CASCADE, related_name="train_schedule")
     station = models.ForeignKey(Station, on_delete=models.CASCADE, related_name="station_schedule")
     id = models.IntegerField("id",primary_key=True)
-    departure = models.CharField("Arrival", max_length=8, null=True)
+    departure = models.CharField("Departure", max_length=8, null=True)
 
     def __str__(self):
         return str(self.train) +" at "+str(self.station)
+
+
+# class Seat_Chart(models.Model):
+#     train = models.ForeignKey(Train, on_delete=models.CASCADE, related_name="train_chart")
+#     first_ac = models.IntegerField("1st AC")
+#     second_ac = models.IntegerField("2nd AC")
+#     third_ac = models.IntegerField("3rd AC")
+#     sleeper = models.IntegerField("Sleeper")
+#     date = models.DateTimeField
