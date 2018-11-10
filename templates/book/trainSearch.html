@@ -9,7 +9,7 @@
 <div class="w3-display-middle" style="width:65%">
     <div class="w3-container w3-white w3-padding-16"  style="height: 500px; overflow-y: scroll;">
     <ul>
-        {% for train,sourceSchedule,destSchedule in schedules %}
+        {% for train,sourceSchedule,destSchedule,scheduleCharts in schedules %}
         <div class="w3-container">
             <li>
                 {{ train }}
@@ -23,6 +23,15 @@
                     {% if destSchedule.arrival %}
                         {{ destSchedule.arrival }}
                     {% endif %}</span>
+{#                    <div>#}
+                        <span>
+                            Book Tickets:
+                            <a href="{% url 'book:book' scheduleCharts.pk sourceSchedule.pk destSchedule.pk '1A' date %}">1A</a>:<label>{{ scheduleCharts.get1A }}</label>
+                            <a>2A</a>:<label>{{ scheduleCharts.get2A }}</label>
+                            <a>3A</a>:<label>{{ scheduleCharts.get3A }}</label>
+                            <a>SL</a>:<label>{{ scheduleCharts.getSL }}</label>
+                        </span>
+{#                    </div>#}
                 </div>
             </li>
         </div>

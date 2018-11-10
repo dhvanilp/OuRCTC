@@ -13,23 +13,24 @@
     <div class="w3-display-middle" style="width:65%">
         <div class="w3-bar w3-black">
             <button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Search');"><i
-                        class="fa fa-plane w3-margin-right"></i>Book
+                        class="fa fa-train w3-margin-right"></i>Book
             </button>
             <button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Map');"><i
-                        class="fa fa-bed w3-margin-right"></i>On Map
+                        class="fa fa-map-marker w3-margin-right"></i>On Map
             </button>
+            <form class="searchForm" action="{% url 'book:search' %}" method="post" onsubmit=submitSearchForm()>
+                {% csrf_token %}
+                <input class="w3-red w3-bar-item dateInput"  type="date" name="journey_date" style="float: right; width: 25%; height: 25px;"  required>
         </div>
 
         <!-- Tabs -->
         <div id="Search" class="w3-container w3-white w3-padding-16 myLink">
             <h3>Travel the world with us</h3>
-            <form class="searchForm" action="{% url 'book:search' %}" method="post" onsubmit=submitSearchForm()>
-                {% csrf_token %}
                 <div class="w3-row-padding" style="margin:0 -16px;">
                     <div class="w3-half">
                         <label>From</label>
                         <!--<input class="w3-input w3-border" type="text" placeholder="Departing from" name="source">-->
-                        <input class="w3-input w3-border" list="sources" name="source">
+                        <input class="w3-input w3-border sourceInput" list="sources" name="source" required>
                           <datalist id="sources">
                               {% for s in stations %}
                               <option value="{{ s.pk }}">{{ s }}</option>
@@ -39,7 +40,7 @@
                     <div class="w3-half">
                         <label>To</label>
                         <!--<input class="w3-input w3-border" type="text" placeholder="Arriving at" name="dest">-->
-                        <input class="w3-input w3-border" list="destinations" name="dest">
+                        <input class="w3-input w3-border" list="destinations" name="dest" required>
                           <datalist id="destinations">
                             {% for s in stations %}
                                 <option value="{{ s.pk }}">{{ s }}</option>
@@ -77,6 +78,7 @@
 
 {% block end-scripts %}
 <script>
+    $(".dateInput").focus();
 
     function submitSearchForm()
     {

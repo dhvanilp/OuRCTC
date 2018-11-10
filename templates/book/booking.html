@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}{{ train }}/{{ source }}-{{ dest }}{% endblock %}
+
+{% block body %}
+<img class="w3-image" src="https://www.w3schools.com/w3images/london2.jpg" alt="London" width="1500" height="700">
+    <div class="w3-display-middle" style="width:65%">
+        <div class="w3-container w3-white w3-padding-16"  style="height: 500px; overflow-y: scroll;">
+            <table style="width: 50%; margin: 0 25%;">
+                <form action="{% url 'book:confirm' chart.pk sourceSchedule.pk destSchedule.pk type date %}" method="post" id="bookingForm">
+                    {% csrf_token %}
+                <tr><th>Train</th><td>{{ train }}</td></tr>
+                <tr><th>From:</th><td>{{ source }} at {{ sourceSchedule.departure }}</td></tr>
+                <tr><th>To:</th><td>{{ dest }} at {{ destSchedule.arrival }}</td></tr>
+                <tr><th>Type:</th><td>{{ type }}</td></tr>
+                <tr><th><label>Select no. of seats:</label></th>
+                    <td><input class="seatsInput" type="number" name="seats" min="1" max="6" style="width: 10%;" onchange=createForm()></td>
+                </tr>
+            </table>
+            <div class="nameInputs">
+                    <tr><th>Passengers</th></tr>
+                </div>
+            <input type="Submit" class="w3-button w3-right confirmTicket" value="Confirm Ticket">
+                </form>
+
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block end-scripts %}
+    <script>
+        $(".seatsInput").focus();
+        $(".confirmTicket").click(function () {
+            seats=$(".seatsInput").val();
+
+        })
+
+        function createForm() {
+            seats=$(".seatsInput").val();
+            originalLength=$(".nameInputs").children().length;
+            form=$(".nameInputs");
+            if(originalLength>seats){
+                for(i=seats;i<originalLength;i++){
+                    $("tr").remove(".name"+i);
+                }
+            }
+            for(i=originalLength;i<seats;i++){
+                input="<tr class='name" + i + "'><th>Passenger " + (i+1) +"</th><td><input type='text' name='name"+i+"' form='bookingForm' required></td></tr>";
+                $(".nameInputs").append(input);
+            }
+
+        }
+    </script>
+{% endblock %}

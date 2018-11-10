@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+
+
+{% block title %}Booking History{% endblock %}
+
+{% block body %}
+<img class="w3-image" src="https://www.w3schools.com/w3images/london2.jpg" alt="London" width="1500" height="700">
+<div class="w3-display-middle" style="width:80%">
+    <div class="w3-container w3-white w3-padding-16"  style="margin-top:50px; height: 600px; overflow-y: scroll;">
+    <h3 style="text-align: center">Booked History</h3>
+    <ul>
+        {% for ticket in booked %}
+            <li class="col-sm-6 w3-card" style="width: 45%; margin: 2% 2.5%">
+                <table>
+                    <tr>
+                        <th>Passenger</th>
+                        <td>{{ ticket.passenger }}</td>
+                    </tr>
+                    <tr>
+                        <th>Train</th>
+                        <td>{{ ticket.train.name }}</td>
+                    </tr>
+                    <tr>
+                        <th>Compartment</th>
+                        <td>{{ ticket.type }}</td>
+                    </tr>
+                    <tr>
+                        <th>From</th>
+                        <td>{{ ticket.source }} at {{ ticket.source_schedule.departure }}</td>
+                    </tr>
+                    <tr>
+                        <th>To</th>
+                        <td>{{ ticket.dest }} at {{ ticket.dest_schedule.arrival }}</td>
+                    </tr>
+                    <tr>
+                        <th>Date</th>
+                        <td>{{ ticket.date }}</td>
+                    </tr>
+                    <tr><th colspan="2"><a href="{% url 'book:cancel' ticket.pk %}"><button class="bg-danger" style="margin: 0 35%;">Cancel Ticket</button></a></th> </tr>
+                </table>
+            </li>
+        {% endfor %}
+    </ul>
+    </div>
+</div>
+{% endblock %}
