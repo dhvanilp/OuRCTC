@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 
-
+{% block extra-head %}
+<style type="text/css">
+  #map{ width:700px; height: 500px; }
+</style>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCFP-zJmSQLJLGdZyY5iWIumtJu7pdibAs&libraries=places"></script>
+{% endblock %}
 
 {% block title %}PseudoRCTC{% endblock %}
 
@@ -10,7 +15,7 @@
     </div>
 <header class="w3-display-container w3-content w3-hide-small" style="max-width:1500px">
     <img class="w3-image" src="https://www.w3schools.com/w3images/london2.jpg" alt="London" width="1500" height="700">
-    <div class="w3-display-middle" style="width:65%">
+    <div class="w3-display-middle" style="width:65%;">
         <div class="w3-bar w3-black">
             <button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Search');"><i
                         class="fa fa-train w3-margin-right"></i>Book
@@ -55,20 +60,9 @@
         </div>
 
         <div id="Map" class="w3-container w3-white w3-padding-16 myLink">
-            <h3 style="text-align: center;">Route A</h3>
-            <div class="flex-parent testimonial-group">
-                <div class="input-flex-container row text-center" style="width: 100%; height: 60%">
-                    {% for s in st %}
-                        <div class="input">
-                            <span data-year="{{ s.name }}" data-info="{{ s.pk }}"></span>
-                        </div>
-                    {% endfor %}
-                    <!--<div class="input">-->
-                        <!--<span data-year="1920" data-info="jungle gym"></span>-->
-                    <!--</div>-->
-                </div>
-                <button class="mapSearch w3-button w3-dark-grey">Search and find dates</button>
-            </div>
+            <div id="map" style="width: 100%; height: 100%;"></div>
+                <button href="{% url 'book:mapSearch' %}" class="mapSearch w3-button w3-dark-grey">Search and find dates</button>
+
 
         </div>
 
@@ -77,6 +71,142 @@
 {% endblock %}
 
 {% block end-scripts %}
+
+    <script>
+    var map; //Will contain map object.
+    var marker_source = false; ////Has the user plotted their location marker?
+    var marker_dest = false; ////Has the user plotted their location marker?
+    var source_flag = true;
+    var source,dest,date;
+    var currentLocation,service;
+    var i=0;
+    //Function called to initialize / create the map.
+    //This is called when the page has loaded.
+    function initMap() {
+
+        //The center location of our map.
+        var centerOfMap = new google.maps.LatLng(16.482,73.339);
+
+        //Map options.
+        var options = {
+          center: centerOfMap, //Set center.
+          zoom: 6.54 //The zoom value.
+        };
+
+        //Create the map object.
+        map = new google.maps.Map(document.getElementById('map'), options);
+
+        //Listen for any clicks on the map.
+        google.maps.event.addListener(map, 'click', function(event) {
+            //Get the location that the user clicked.
+            var clickedLocation = event.latLng;
+            //If the marker hasn't been added.
+
+            //Get the marker's location.
+            if(source_flag) {
+                if(marker_source === false){
+                    //Create the marker.
+                    marker_source = new google.maps.Marker({
+                        position: clickedLocation,
+                        map: map,
+                        draggable: true,//make it draggable,
+                        icon: {url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"}
+                    });
+                    //Listen for drag events!
+                    google.maps.event.addListener(marker_source, 'dragend', function(event){
+                        markerLocation(marker_source);
+                    });
+                } else{
+                    //Marker has already been added, so just change its location.
+                    marker_source.setPosition(clickedLocation);
+                }
+                markerLocation(marker_source);
+                source_flag=false;
+            }
+            else{
+                if(marker_dest === false){
+                    //Create the marker.
+                    marker_dest = new google.maps.Marker({
+                        position: clickedLocation,
+                        map: map,
+                        draggable: true ,//make it draggable,
+                        icon: {url: "http://maps.google.com/mapfiles/ms/icons/purple-dot.png"}
+                    });
+                    //Listen for drag events!
+                    google.maps.event.addListener(marker_dest, 'dragend', function(event){
+                        markerLocation(marker_dest);
+                    });
+                } else{
+                    //Marker has already been added, so just change its location.
+                    marker_dest.setPosition(clickedLocation);
+                }
+                markerLocation(marker_dest);
+                source_flag=true;
+            }
+        });
+    }
+
+    //This function will get the marker's current location and then add the lat/long
+    //values to our textfields so that we can save the location.
+    function markerLocation(marker){
+        //Get location.
+        currentLocation = marker.getPosition();
+        console.log(currentLocation);
+        console.log("hi");
+        service = new google.maps.places.PlacesService(map);
+
+        service.nearbySearch({
+            location:currentLocation,
+            radius:1000
+        }, function(place, status) {
+          if (status === google.maps.places.PlacesServiceStatus.OK) {
+            google.maps.event.addListener(marker, 'click', function(){
+                if(marker === marker_source){
+                    source=place[0].name;
+                }
+                else{
+                    dest=place[0].name;
+                }
+                date=$(".dateInput").val();
+                console.log(source,dest,date)
+
+            });
+          }
+        });
+    }
+
+    $('.mapSearch').click(function (e) {
+        e.preventDefault();
+        if (source && dest && date!="") {
+
+            var url = $(this).attr('href');
+            console.log(url);
+
+            $.ajax({
+                url: url,
+                method: "GET",
+                data: {
+                    "source": source,
+                    "dest": dest,
+                    "date": date,
+                },
+                success: function (data) {
+                    console.log(data);
+                    query=$(".searchForm")[0];
+                    query['source'].value=data.source;
+                    query['dest'].value=data.dest;
+                    query.submit();
+                }, error: function (error) {
+                    console.log(error);
+                }
+            });
+        }
+    });
+
+
+    //Load the map when the page has finished loading.
+    google.maps.event.addDomListener(window, 'load', initMap);
+    </script>
 <script>
     $(".dateInput").focus();
 
@@ -110,62 +240,5 @@
     document.getElementsByClassName("tablink")[0].click();
 
 
-    $(function(){
-        var inputs = $('.input');
-        var paras = $('.description-flex-container').find('p');
-        var sflag = 0;
-        var dflag = 1;
-        $(inputs).click(function(){
-            if(sflag==0){
-                sflag=1;
-                source = this;
-                $(source).addClass("activeS");
-                $(inputs).not($(this)).add($(paras).not(this)).removeClass('activeS');
-                dflag=0;
-            }
-            else{
-                dflag=1;
-                dest = this;
-                $(dest).addClass("activeD");
-                $(inputs).not($(this)).add($(paras).not(this)).removeClass('activeD');
-                sflag=0;
-            }
-            // if(dflag)
-            //     console.log(source.firstElementChild.getAttribute("data-info")+" ," +  dest.firstElementChild.getAttribute("data-info"));
-
-
-
-            // $(this).addClass("active");
-
-            // console.log(this)
-            // var t = $(this),
-            //     ind = t.index(),
-            //     matchedPara = $(paras).eq(ind);
-            // console.log($(t).add(matchedPara)[0])
-            // $(t).add(matchedPara).addClass('active');
-
-        });
-    });
-
-    $(".mapSearch").click(function(){
-
-        if(source && dest){
-            query=$(".searchForm")[0];
-                    query['source'].value=source.firstElementChild.getAttribute("data-info");
-                    query['dest'].value=dest.firstElementChild.getAttribute("data-info");
-                    // console.log(query['source'].value);
-                    query.submit();
-
-        }
-        else {
-            if(!source && !dest){
-                alertMessage="Please select a source and a destination.";
-            }
-            else if(!dest){
-                alertMessage="Please select a destination.";
-            }
-            alert(alertMessage);
-        }
-    });
 </script>
 {% endblock %}

@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'braces',
     'authtools',
     'crispy_forms',
+    'rest_framework',
     'accounts',
     'book',
 ]

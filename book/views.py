@@ -3,6 +3,9 @@ from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView,UpdateView,DeleteView
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from rest_framework import authentication, permissions
+from rest_framework.views import APIView
+from rest_framework.response import Response
 from .models import *
 from dateutil import parser
 import json, time
@@ -52,6 +55,39 @@ def searchView(request):
         "date": date,
     }
     return render(request,'book/trainSearch.html',data)
+
+@login_required(login_url="/login")
+def mapSearchView(request,source,dest,date):
+    print(source)
+    source = Station.objects.filter(name__iexact=source)
+    print(source)
+    return render(request, 'book/home.html')
+
+class MapSearchView(LoginRequiredMixin, APIView):
+    login_url =  '/login'
+    authentication_classes = (authentication.SessionAuthentication,)
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get(self, request, format=None):
+        date=request.GET["date"]
+        sources = request.GET["source"]
+        dests = request.GET["dest"]
+        for s in sources:
+            source=Station.objects.filter(name__iexact=sources)
+            if source.count():
+                break
+        for d in dests:
+            dest=Station.objects.filter(name__iexact=dests)
+            if dest.count():
+                break
+
+        data={
+            "date":date,
+            "source":source[0].code,
+            "dest": dest[0].code,
+        }
+
+        return Response(data)
 
 @login_required(login_url="/login")
 def bookView(request,chart,sourceSchedule,destSchedule,type,date):
