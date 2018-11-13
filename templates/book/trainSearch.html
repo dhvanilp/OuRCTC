@@ -27,9 +27,9 @@
                         <span>
                             Book Tickets:
                             <a href="{% url 'book:book' scheduleCharts.pk sourceSchedule.pk destSchedule.pk '1A' date %}">1A</a>:<label>{{ scheduleCharts.get1A }}</label>
-                            <a>2A</a>:<label>{{ scheduleCharts.get2A }}</label>
-                            <a>3A</a>:<label>{{ scheduleCharts.get3A }}</label>
-                            <a>SL</a>:<label>{{ scheduleCharts.getSL }}</label>
+                            <a href="{% url 'book:book' scheduleCharts.pk sourceSchedule.pk destSchedule.pk '2A' date %}">2A</a>:<label>{{ scheduleCharts.get2A }}</label>
+                            <a href="{% url 'book:book' scheduleCharts.pk sourceSchedule.pk destSchedule.pk '3A' date %}">3A</a>:<label>{{ scheduleCharts.get3A }}</label>
+                            <a href="{% url 'book:book' scheduleCharts.pk sourceSchedule.pk destSchedule.pk 'SL' date %}">SL</a>:<label>{{ scheduleCharts.getSL }}</label>
                         </span>
 {#                    </div>#}
                 </div>
@@ -37,6 +37,10 @@
         </div>
         {% endfor %}
     </ul>
+    <div>
+        <h5 style=" text-align: center;"><a href="{% url 'book:complexSearch' source.pk dest.pk date %}" style="font-weight: bold;">Click here</a> to check intermidiate trains</h5>
     </div>
+    </div>
+
 </div>
 {% endblock %}

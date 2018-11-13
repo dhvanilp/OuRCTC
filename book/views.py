@@ -57,11 +57,63 @@ def searchView(request):
     return render(request,'book/trainSearch.html',data)
 
 @login_required(login_url="/login")
-def mapSearchView(request,source,dest,date):
-    print(source)
-    source = Station.objects.filter(name__iexact=source)
-    print(source)
-    return render(request, 'book/home.html')
+def complexSearchView(request,source,dest,date):
+    source = Station.objects.get(pk=source)
+    dest = Station.objects.get(pk=dest)
+    sourceTrains = []
+    for s in source.station_schedule.all():
+        sourceTrains.append(s.train)
+    destTrains = []
+    for s in dest.station_schedule.all():
+        destTrains.append(s.train)
+    # allTrains=list(set(sourceTrains) & set(destTrains))
+
+    trains1 = []
+    trains2 = []
+    sourceSchedules = []
+    commonSchedules1 = []
+    commonSchedules2 = []
+    destSchedules = []
+    scheduleCharts1 = []
+    scheduleCharts2 = []
+
+    for ts in sourceTrains:
+        s=source.station_schedule.get(train=ts)
+        source_stations = []
+        for a in ts.train_schedule.filter(id__gte=s.id):
+            source_stations.append(a.station)
+        for td in destTrains:
+            d = dest.station_schedule.get(train=td)
+            dest_stations = []
+            for a in td.train_schedule.filter(id__lte=d.id):
+                dest_stations.append(a.station)
+            common = list(set(source_stations) & set(dest_stations))
+            for c in common:
+                d1=c.station_schedule.get(train=ts)
+                s1=c.station_schedule.get(train=td)
+                if(d1.arrival < s1.departure):
+                    print(c)
+                    trains1.append(ts)
+                    trains2.append(td)
+                    commonSchedules1.append(d1)
+                    commonSchedules2.append(s1)
+                    sourceSchedules.append(s)
+                    destSchedules.append(d)
+                    c1=Seat_Chart.objects.get(date=parser.parse(date),train=ts)
+                    c2=Seat_Chart.objects.get(date=parser.parse(date),train=td)
+                    scheduleCharts1.append(c1)
+                    scheduleCharts2.append(c2)
+                    break
+
+    schedules=zip(trains1,trains2,sourceSchedules,commonSchedules1,commonSchedules2,destSchedules,scheduleCharts1,scheduleCharts2)
+    data={
+        "source": source,
+        "dest": dest,
+        "schedules":schedules,
+        "date": date,
+    }
+    return render(request,'book/connectingTrainSearch.html',data)
+
 
 class MapSearchView(LoginRequiredMixin, APIView):
     login_url =  '/login'
@@ -74,6 +126,7 @@ class MapSearchView(LoginRequiredMixin, APIView):
         dests = request.GET["dest"]
         for s in sources:
             source=Station.objects.filter(name__iexact=sources)
+            print(s)
             if source.count():
                 break
         for d in dests:
@@ -110,6 +163,34 @@ def bookView(request,chart,sourceSchedule,destSchedule,type,date):
     return render(request,'book/booking.html',data)
 
 @login_required(login_url="/login")
+def complexBookView(request,chart1,chart2,sourceSchedule,commonSchedule1,commonSchedule2,destSchedule,type,date):
+    chart1 = Seat_Chart.objects.get(pk=chart1)
+    chart2 = Seat_Chart.objects.get(pk=chart2)
+    train1 = chart1.train
+    train2 = chart2.train
+    sourceSchedule=Schedule.objects.get(pk=sourceSchedule)
+    commonSchedule1=Schedule.objects.get(pk=commonSchedule1)
+    commonSchedule2=Schedule.objects.get(pk=commonSchedule2)
+    destSchedule=Schedule.objects.get(pk=destSchedule)
+    source = sourceSchedule.station
+    dest = destSchedule.station
+    data = {
+        "train1": train1,
+        "train2": train2,
+        "chart1": chart1,
+        "chart2": chart2,
+        "sourceSchedule": sourceSchedule,
+        "commonSchedule1": commonSchedule1,
+        "commonSchedule2": commonSchedule2,
+        "destSchedule": destSchedule,
+        "source":source,
+        "dest":dest,
+        "type":type,
+        "date":date,
+    }
+    return render(request,'book/complexBooking.html',data)
+
+@login_required(login_url="/login")
 def confirmTicketView(request,chart,sourceSchedule,destSchedule,type,date):
     chart=Seat_Chart.objects.get(pk=chart)
     train=chart.train
@@ -142,6 +223,65 @@ def confirmTicketView(request,chart,sourceSchedule,destSchedule,type,date):
         "source":source,
         "dest":dest,
         "type":type
+    }
+    return render(request, 'book/home.html')
+
+@login_required(login_url="/login")
+def complexConfirmTicketView(request,chart1,chart2,sourceSchedule,commonSchedule1,commonSchedule2,destSchedule,type,date):
+    chart1 = Seat_Chart.objects.get(pk=chart1)
+    chart2 = Seat_Chart.objects.get(pk=chart2)
+    train1 = chart1.train
+    train2 = chart2.train
+    sourceSchedule = Schedule.objects.get(pk=sourceSchedule)
+    commonSchedule1 = Schedule.objects.get(pk=commonSchedule1)
+    commonSchedule2 = Schedule.objects.get(pk=commonSchedule2)
+    destSchedule = Schedule.objects.get(pk=destSchedule)
+    source = sourceSchedule.station
+    dest = destSchedule.station
+    user= request.user
+    seats=int(request.POST["seats"])
+    for i in range(seats):
+        name=request.POST.get("name"+str(i))
+        b=Ticket()
+        b.passenger=name
+        b.train=train1
+        b.type=type
+        b.chart=chart1
+        b.user=user
+        b.source=source
+        b.dest=dest
+        b.source_schedule=sourceSchedule
+        b.dest_schedule=commonSchedule1
+        b.date = date
+        b.save()
+
+        b = Ticket()
+        b.passenger = name
+        b.train = train2
+        b.type = type
+        b.chart = chart2
+        b.user = user
+        b.source = source
+        b.dest = dest
+        b.source_schedule = commonSchedule2
+        b.dest_schedule = destSchedule
+        b.date = date
+        b.save()
+
+
+    data = {
+        "train1": train1,
+        "train2": train2,
+        "chart1": chart1,
+        "chart2": chart2,
+        "sourceSchedule": sourceSchedule,
+        "commonSchedule1": commonSchedule1,
+        "commonSchedule2": commonSchedule2,
+        "destSchedule": destSchedule,
+        "source":source,
+        "dest":dest,
+        "type":type,
+        "date":date,
     }
     return render(request, 'book/home.html')
 
