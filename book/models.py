@@ -80,6 +80,19 @@ class Ticket(models.Model):
     source_schedule = models.ForeignKey(Schedule, on_delete=models.CASCADE, related_name="source_schedule_tickets")
     dest_schedule = models.ForeignKey(Schedule, on_delete=models.CASCADE, related_name="dest_schedule_tickets")
     date = models.DateField("Date")
+    fare = models.IntegerField("Fare")
 
     def __str__(self):
         return str(self.passenger) +" on "+str(self.date)+" in "+str(self.train)
+
+    def calculateFare(self):
+        factor=1
+        if(self.type=="1A"):
+            factor=20
+        elif(self.type=="2A"):
+            factor=15
+        elif (self.type == "3A"):
+            factor = 10
+        else:
+            factor = 5
+        self.fare = (self.dest_schedule.pk - self.source_schedule.pk)*factor

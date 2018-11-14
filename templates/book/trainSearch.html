@@ -4,43 +4,81 @@
 
 {% block title %}{{ source }} to {{ dest }}{% endblock %}
 
+{% block extra-head %}
+    <style>
+        .col {
+            border-right: 1px solid #000;
+            padding-right: 10px;
+        }
+    </style>
+{% endblock %}
+
 {% block body %}
-<img class="w3-image" src="https://www.w3schools.com/w3images/london2.jpg" alt="London" width="1500" height="700">
 <div class="w3-display-middle" style="width:65%">
     <div class="w3-container w3-white w3-padding-16"  style="height: 500px; overflow-y: scroll;">
     <ul>
-        {% for train,sourceSchedule,destSchedule,scheduleCharts in schedules %}
-        <div class="w3-container">
-            <li>
-                {{ train }}
-                <button class="w3-button" style="float:right;">Expand</button>
-                <div class="w3-container">
-                    <span>Departure:
-                    {% if sourceSchedule.departure %}
-                        {{ sourceSchedule.departure }}
-                    {% endif %}</span>
-                    <span>Arrival:
-                    {% if destSchedule.arrival %}
-                        {{ destSchedule.arrival }}
-                    {% endif %}</span>
-{#                    <div>#}
-                        <span>
-                            Book Tickets:
-                            <a href="{% url 'book:book' scheduleCharts.pk sourceSchedule.pk destSchedule.pk '1A' date %}">1A</a>:<label>{{ scheduleCharts.get1A }}</label>
-                            <a href="{% url 'book:book' scheduleCharts.pk sourceSchedule.pk destSchedule.pk '2A' date %}">2A</a>:<label>{{ scheduleCharts.get2A }}</label>
-                            <a href="{% url 'book:book' scheduleCharts.pk sourceSchedule.pk destSchedule.pk '3A' date %}">3A</a>:<label>{{ scheduleCharts.get3A }}</label>
-                            <a href="{% url 'book:book' scheduleCharts.pk sourceSchedule.pk destSchedule.pk 'SL' date %}">SL</a>:<label>{{ scheduleCharts.getSL }}</label>
-                        </span>
-{#                    </div>#}
+        {% for train,sourceSchedule,destSchedule,scheduleCharts,fare in schedules %}
+            <li class="col-sm-6 w3-card" style="width: 45%; height: 138px; margin: 2% 2.5%">
+            <button class="w3-button showSeats" style="float:right; margin-top:1%; margin-right: -1%; ">Seats</button>
+            <div class="trainDetails">
+                <h6 style="font-weight: bold;">{{ train }}</h6>
+                <table>
+                    <tr style="line-height: 5%;"><th>Departure</th><td>{{ sourceSchedule.departure }}</td></tr>
+                    <tr style="line-height: 5%;"><th>Arrival</th><td>{{ destSchedule.arrival }}</td></tr>
+                </table>
+            </div>
+            <div class="seatDetails" style="display: none;">
+                <div>
+                    <table style="width: 50%; height: 100px;">
+                        <thead><tr>
+                            <th>Class</th>
+                            <th>Seats</th>
+                            <th>Fare</th>
+                            <th>Class</th>
+                            <th>Seats</th>
+                            <th>Fare</th>
+                        </tr></thead>
+                        <tr style="line-height: 5%;">
+                            <th><a href="{% url 'book:book' scheduleCharts.pk sourceSchedule.pk destSchedule.pk '1A' date %}">1A</a></th><td>{{ scheduleCharts.get1A }}</td>    <td class="col">₹{{ fare.1A }}</td>
+                            <th><a href="{% url 'book:book' scheduleCharts.pk sourceSchedule.pk destSchedule.pk '2A' date %}">2A</a></th><td>{{ scheduleCharts.get2A }}</td>   <td>₹{{ fare.2A }}</td>
+                        </tr>
+                        <tr style="line-height: 5%;">
+                            <th><a href="{% url 'book:book' scheduleCharts.pk sourceSchedule.pk destSchedule.pk '3A' date %}">3A</a></th><td>{{ scheduleCharts.get3A }}</td>   <td class="col">₹{{ fare.3A }}</td>
+                            <th><a href="{% url 'book:book' scheduleCharts.pk sourceSchedule.pk destSchedule.pk 'SL' date %}">SL</a></th><td>{{ scheduleCharts.getSL }}</td>   <td>₹{{ fare.SL }}</td>
+                        </tr>
+                    </table>
                 </div>
+            </div>
             </li>
-        </div>
         {% endfor %}
     </ul>
     <div>
-        <h5 style=" text-align: center;"><a href="{% url 'book:complexSearch' source.pk dest.pk date %}" style="font-weight: bold;">Click here</a> to check intermidiate trains</h5>
+        <h5 style=" text-align: center;"><a href="{% url 'book:complexSearch' source.pk dest.pk date %}" style="font-weight: bold; color: blue;">Click here</a> to check intermidiate trains</h5>
     </div>
     </div>
 
 </div>
+{% endblock %}
+
+{% block end-scripts %}
+    <script>
+        $(".showSeats").click(function () {
+            $(".seatDetails").hide();
+            $(".trainDetails").show();
+            if($(this).text()=="Trains"){
+                $($(this).siblings(".seatDetails")[0]).hide();
+                $($(this).siblings(".trainDetails")[0]).show();
+                $(this).text("Seats");
+            }
+            else {
+                $(".showSeats").text("Seats");
+                $($(this).siblings(".seatDetails")[0]).show();
+                $($(this).siblings(".trainDetails")[0]).hide();
+                $(this).text("Trains");
+            }
+        });
+
+    </script>
+
+
 {% endblock %}

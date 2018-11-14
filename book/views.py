@@ -38,6 +38,7 @@ def searchView(request):
     sourceSchedules=[]
     destSchedules=[]
     scheduleCharts=[]
+    fares=[]
     for t in allTrains:
         departing_station = t.train_schedule.get(station=source)
         arriving_station = t.train_schedule.get(station=dest)
@@ -46,8 +47,14 @@ def searchView(request):
             trains.append(t)
             sourceSchedules.append(departing_station)
             destSchedules.append(arriving_station)
+            fare={}
+            fare["1A"]=(arriving_station.pk - departing_station.pk)*20
+            fare["2A"]=(arriving_station.pk - departing_station.pk)*15
+            fare["3A"]=(arriving_station.pk - departing_station.pk)*10
+            fare["SL"]=(arriving_station.pk - departing_station.pk)*5
+            fares.append((fare))
 
-    schedules=zip(trains,sourceSchedules,destSchedules,scheduleCharts)
+    schedules=zip(trains,sourceSchedules,destSchedules,scheduleCharts,fares)
     data={
         "source": source,
         "dest": dest,
@@ -76,36 +83,44 @@ def complexSearchView(request,source,dest,date):
     destSchedules = []
     scheduleCharts1 = []
     scheduleCharts2 = []
+    fares=[]
+
 
     for ts in sourceTrains:
-        s=source.station_schedule.get(train=ts)
+        sourceSchedule=source.station_schedule.get(train=ts)
         source_stations = []
-        for a in ts.train_schedule.filter(id__gte=s.id):
+        for a in ts.train_schedule.filter(id__gte=sourceSchedule.id):
             source_stations.append(a.station)
         for td in destTrains:
-            d = dest.station_schedule.get(train=td)
+            destSchedule = dest.station_schedule.get(train=td)
             dest_stations = []
-            for a in td.train_schedule.filter(id__lte=d.id):
+            for a in td.train_schedule.filter(id__lte=destSchedule.id):
                 dest_stations.append(a.station)
             common = list(set(source_stations) & set(dest_stations))
             for c in common:
-                d1=c.station_schedule.get(train=ts)
-                s1=c.station_schedule.get(train=td)
-                if(d1.arrival < s1.departure):
-                    print(c)
+                tempDestSchedule=c.station_schedule.get(train=ts)
+                tempSourceSchedule=c.station_schedule.get(train=td)
+                if(tempDestSchedule.arrival < tempSourceSchedule.departure):
                     trains1.append(ts)
                     trains2.append(td)
-                    commonSchedules1.append(d1)
-                    commonSchedules2.append(s1)
-                    sourceSchedules.append(s)
-                    destSchedules.append(d)
+                    commonSchedules1.append(tempDestSchedule)
+                    commonSchedules2.append(tempSourceSchedule)
+                    sourceSchedules.append(sourceSchedule)
+                    destSchedules.append(destSchedule)
                     c1=Seat_Chart.objects.get(date=parser.parse(date),train=ts)
                     c2=Seat_Chart.objects.get(date=parser.parse(date),train=td)
                     scheduleCharts1.append(c1)
                     scheduleCharts2.append(c2)
+                    # fares.append(None)
+                    fare = {}
+                    fare["1A"] = (destSchedule.pk - tempSourceSchedule.pk + tempDestSchedule.pk - sourceSchedule.pk) * 20
+                    fare["2A"] = (destSchedule.pk - tempSourceSchedule.pk + tempDestSchedule.pk - sourceSchedule.pk) * 15
+                    fare["3A"] = (destSchedule.pk - tempSourceSchedule.pk + tempDestSchedule.pk - sourceSchedule.pk) * 10
+                    fare["SL"] = (destSchedule.pk - tempSourceSchedule.pk + tempDestSchedule.pk - sourceSchedule.pk) * 5
+                    fares.append((fare))
                     break
 
-    schedules=zip(trains1,trains2,sourceSchedules,commonSchedules1,commonSchedules2,destSchedules,scheduleCharts1,scheduleCharts2)
+    schedules=zip(trains1,trains2,sourceSchedules,commonSchedules1,commonSchedules2,destSchedules,scheduleCharts1,scheduleCharts2,fares)
     data={
         "source": source,
         "dest": dest,
@@ -213,6 +228,7 @@ def confirmTicketView(request,chart,sourceSchedule,destSchedule,type,date):
         b.source_schedule=sourceSchedule
         b.dest_schedule=destSchedule
         b.date = date
+        b.calculateFare()
         b.save()
 
 
@@ -253,6 +269,7 @@ def complexConfirmTicketView(request,chart1,chart2,sourceSchedule,commonSchedule
         b.source_schedule=sourceSchedule
         b.dest_schedule=commonSchedule1
         b.date = date
+        b.calculateFare()
         b.save()
 
         b = Ticket()
@@ -266,6 +283,7 @@ def complexConfirmTicketView(request,chart1,chart2,sourceSchedule,commonSchedule
         b.source_schedule = commonSchedule2
         b.dest_schedule = destSchedule
         b.date = date
+        b.calculateFare()
         b.save()
 
 

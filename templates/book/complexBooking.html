@@ -3,7 +3,6 @@
 {% block title %}{{ train }}/{{ source }}-{{ dest }}{% endblock %}
 
 {% block body %}
-<img class="w3-image" src="https://www.w3schools.com/w3images/london2.jpg" alt="London" width="1500" height="700">
     <div class="w3-display-middle" style="width:65%">
         <div class="w3-container w3-white w3-padding-16"  style="height: 500px; overflow-y: scroll;">
             <table style="width: 50%; margin: 0 25%;">
@@ -15,14 +14,17 @@
                 <tr><th>To:</th><td>{{ dest }} at {{ destSchedule.arrival }}</td></tr>
                 <tr><th>Type:</th><td>{{ type }}</td></tr>
                 <tr><th><label>Select no. of seats:</label></th>
-                    <td><input class="seatsInput" type="number" name="seats" min="1" max="6" style="width: 10%;" onchange=createForm()></td>
+                    <td><input class="seatsInput" type="number" name="seats" min="1" max="6" value="1" style="width: 10%;" onchange=createForm()>
+                    <input type="Submit" class="w3-button w3-right confirmTicket" value="Confirm Ticket"></td>
                 </tr>
             </table>
-            <div class="nameInputs">
-                    <tr><th>Passengers</th></tr>
-                </div>
-            <input type="Submit" class="w3-button w3-right confirmTicket" value="Confirm Ticket">
-                </form>
+            <div class="w3-container col-lg-6" style="margin: 0 23%;">
+                <table class="nameInputs">
+                    <caption style="margin: 0 25%; width: 50%;">Passengers</caption>
+                </table>
+            </div>
+
+            </form>
 
         </div>
     </div>
@@ -31,6 +33,12 @@
 
 {% block end-scripts %}
     <script>
+        $(document).ready(function(){
+            i=0;
+            input="<tr class='name" + i + "'><th>Passenger " + (i+1) +"</th><td><input type='text' name='name"+i+"' form='bookingForm' required></td></tr>";
+            $(".nameInputs").append(input);
+        });
+
         $(".seatsInput").focus();
         $(".confirmTicket").click(function () {
             seats=$(".seatsInput").val();
@@ -39,7 +47,7 @@
 
         function createForm() {
             seats=$(".seatsInput").val();
-            originalLength=$(".nameInputs").children().length;
+            originalLength=$(".nameInputs").children().length - 1;
             form=$(".nameInputs");
             if(originalLength>seats){
                 for(i=seats;i<originalLength;i++){

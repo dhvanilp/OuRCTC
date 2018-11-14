@@ -11,10 +11,6 @@
 
 
 {% block body %}
-    <div>
-    </div>
-<header class="w3-display-container w3-content w3-hide-small" style="max-width:1500px">
-    <img class="w3-image" src="https://www.w3schools.com/w3images/london2.jpg" alt="London" width="1500" height="700">
     <div class="w3-display-middle" style="width:65%;">
         <div class="w3-bar w3-black">
             <button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Search');"><i
@@ -54,20 +50,19 @@
                     </div>
                 </div>
                 <p>
-                    <input class="w3-button w3-dark-grey" type="submit" value="Search and find dates">
+                    <input class="w3-button w3-dark-grey" type="submit" value="Search Trains">
                 </p>
             </form>
         </div>
 
         <div id="Map" class="w3-container w3-white w3-padding-16 myLink">
             <div id="map" style="width: 100%; height: 100%;"></div>
-                <button href="{% url 'book:mapSearch' %}" class="mapSearch w3-button w3-dark-grey">Search and find dates</button>
+                <button href="{% url 'book:mapSearch' %}" class="mapSearch w3-button w3-dark-grey">Search Trains</button>
 
 
         </div>
 
     </div>
-</header>
 {% endblock %}
 
 {% block end-scripts %}

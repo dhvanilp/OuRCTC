@@ -5,87 +5,107 @@
 {% block title %}{{ source }} to {{ dest }}{% endblock %}
 
 {% block body %}
-<img class="w3-image" src="https://www.w3schools.com/w3images/london2.jpg" alt="London" width="1500" height="700">
 <div class="w3-display-middle" style="width:65%">
     <div class="w3-container w3-white w3-padding-16"  style="height: 500px; overflow-y: scroll;">
     <ul>
-        {% for train1,train2,sourceSchedule,commonSchedule1,commonSchedule2,destSchedule,scheduleChart1,scheduleChart2 in schedules %}
-        <div class="w3-container">
-            <li>
-                <button class="w3-button" style="float:right;">Expand</button>
-                {{ train1 }} -> {{ train2 }}
-                <div class="w3-container">
-                    <span>Departure from {{ source.name }} at
-                    {% if sourceSchedule.departure %}
-                        {{ sourceSchedule.departure }}
-                    {% endif %}</span>
-                    <span>Arrival to {{ commonSchedule1.station }} at
-                    {% if commonSchedule1.arrival %}
-                        {{ commonSchedule1.arrival }}
-                    {% endif %}</span>
-{#                    <div>#}
-{#                        <span>#}
-{#                            Book Tickets:#}
-{#                            <a href="{% url 'book:book' scheduleCharts.pk sourceSchedule.pk destSchedule.pk '1A' date %}">1A</a>:<label>{{ scheduleCharts.get1A }}</label>#}
-{#                            <a>2A</a>:<label>{{ scheduleCharts.get2A }}</label>#}
-{#                            <a>3A</a>:<label>{{ scheduleCharts.get3A }}</label>#}
-{#                            <a>SL</a>:<label>{{ scheduleCharts.getSL }}</label>#}
-{#                        </span>#}
-{#                    </div>#}
-                </div>
-                Change trains at {{ commonSchedule1.station }}
-                <div class="w3-container">
-                    <span>Departure from {{ commonSchedule2.station }} at
-                    {% if commonSchedule2.departure %}
-                        {{ commonSchedule2.departure }}
-                    {% endif %}</span>
-                    <span>Arrival to {{ dest.name }} at
-                    {% if destSchedule.arrival %}
-                        {{ destSchedule.arrival }}
-                    {% endif %}</span>
-                </div>
+        {% for train1,train2,sourceSchedule,commonSchedule1,commonSchedule2,destSchedule,scheduleChart1,scheduleChart2,fare in schedules %}
+            <li class="col-sm-6 w3-card" style="width: 45%; height: 250px; margin: 2% 2.5%">
+            <button class="w3-button showSeats" style="float:right; margin-top:1%;">Seats</button>
+            <div class="trainDetails">
+                <h6 style="font-weight: bold;">{{ train1 }}</h6>
+                <table>
+                    <tr style="line-height: 5%; size: 10px;"><th>Departure</th><td>{{ sourceSchedule.departure }}</td></tr>
+                    <tr style="line-height: 5%;"><th>Arrival</th><td>{{ commonSchedule1.arrival }}</td></tr>
+                </table>
+                <h6 style="font-weight: bold;">Change trains at {{ commonSchedule1.station }}</h6>
+                <h6 style="font-weight: bold;">{{ train2 }}</h6>
+                <table>
+                    <tr style="line-height: 5%;"><th>Departure</th><td>{{ commonSchedule2.departure }}</td></tr>
+                    <tr style="line-height: 5%;"><th>Arrival</th><td>{{ commonSchedule2.arrival }}</td></tr>
+                </table>
+            </div>
+            <div class="seatDetails" style="display: none;">
                 <div>
-                    <span>
-                        Book Tickets:
-                    <a href="{% url 'book:complexBook' scheduleChart1.pk scheduleChart2.pk sourceSchedule.pk commonSchedule1.pk commonSchedule2.pk destSchedule.pk '1A' date %}">1A</a>:
-                    <label>
-                        {% if scheduleChart1.get1A < scheduleChart2.get1A %}
-                            {{ scheduleChart1.get1A }}
-                        {% else %}
-                            {{ scheduleChart2.get1A }}
-                        {% endif %}
-                    </label>
-                    <a href="{% url 'book:complexBook' scheduleChart1.pk scheduleChart2.pk sourceSchedule.pk commonSchedule1.pk commonSchedule2.pk destSchedule.pk '2A' date %}">2A</a>:
-                    <label>
-                        {% if scheduleChart1.get2A < scheduleChart2.get2A %}
-                            {{ scheduleChart1.get2A }}
-                        {% else %}
-                            {{ scheduleChart2.get2A }}
-                        {% endif %}
-                    </label>
-                    <a href="{% url 'book:complexBook' scheduleChart1.pk scheduleChart2.pk sourceSchedule.pk commonSchedule1.pk commonSchedule2.pk destSchedule.pk '3A' date %}">3A</a>:
-                    <label>
-                        {% if scheduleChart1.get3A < scheduleChart2.get3A %}
-                            {{ scheduleChart1.get3A }}
-                        {% else %}
-                            {{ scheduleChart2.get3A }}
-                        {% endif %}
-                    </label>
-                    <a href="{% url 'book:complexBook' scheduleChart1.pk scheduleChart2.pk sourceSchedule.pk commonSchedule1.pk commonSchedule2.pk destSchedule.pk 'SL' date %}">SL</a>:
-                    <label>
-                        {% if scheduleChart1.getSL < scheduleChart2.getSL %}
-                            {{ scheduleChart1.getSL }}
-                        {% else %}
-                            {{ scheduleChart2.getSL }}
-                        {% endif %}
-                    </label>
-                    </span>
+                    <table style="width: 50%; height: 100px;">
+                        <thead><tr>
+                            <th>Class</th>
+                            <th>Seats</th>
+                            <th>Fare</th>
+                        </tr></thead>
+                        <tr style="line-height: 10%;">
+                            <th><a href="{% url 'book:complexBook' scheduleChart1.pk scheduleChart2.pk sourceSchedule.pk commonSchedule1.pk commonSchedule2.pk destSchedule.pk '1A' date %}">1A</a></th>
+                            <td>
+                                {% if scheduleChart1.get1A < scheduleChart2.get1A %}
+                                    {{ scheduleChart1.get1A }}
+                                {% else %}
+                                    {{ scheduleChart2.get1A }}
+                                {% endif %}
+                            </td>
+                            <td>₹{{ fare.1A }}</td>
+                        </tr>
+                        <tr>
+                            <th><a href="{% url 'book:complexBook' scheduleChart1.pk scheduleChart2.pk sourceSchedule.pk commonSchedule1.pk commonSchedule2.pk destSchedule.pk '2A' date %}">2A</a></th>
+                            <td>
+                                {% if scheduleChart1.get2A < scheduleChart2.get2A %}
+                                    {{ scheduleChart1.get2A }}
+                                {% else %}
+                                    {{ scheduleChart2.get2A }}
+                                {% endif %}
+                            </td>
+                            <td>₹{{ fare.2A }}</td>
+                        </tr>
+                        <tr style="line-height: 10%;">
+                            <th><a href="{% url 'book:complexBook' scheduleChart1.pk scheduleChart2.pk sourceSchedule.pk commonSchedule1.pk commonSchedule2.pk destSchedule.pk '3A' date %}">3A</a></th>
+                            <td>
+                                {% if scheduleChart1.get3A < scheduleChart2.get3A %}
+                                    {{ scheduleChart1.get3A }}
+                                {% else %}
+                                    {{ scheduleChart2.get3A }}
+                                {% endif %}
+                            </td>
+                            <td>₹{{ fare.3A }}</td>
+                        </tr>
+                        <tr>
+                            <th><a href="{% url 'book:complexBook' scheduleChart1.pk scheduleChart2.pk sourceSchedule.pk commonSchedule1.pk commonSchedule2.pk destSchedule.pk 'SL' date %}">SL</a></th>
+                            <td>
+                                {% if scheduleChart1.getSL < scheduleChart2.getSL %}
+                                    {{ scheduleChart1.getSL }}
+                                {% else %}
+                                    {{ scheduleChart2.getSL }}
+                                {% endif %}
+                            </td>
+                            <td>₹{{ fare.SL }}</td>
+                        </tr>
+                    </table>
                 </div>
+            </div>
             </li>
-        </div>
         {% endfor %}
     </ul>
     </div>
 
 </div>
+{% endblock %}
+
+{% block end-scripts %}
+    <script>
+        $(".showSeats").click(function () {
+            $(".seatDetails").hide();
+            $(".trainDetails").show();
+            if($(this).text()=="Trains"){
+                $($(this).siblings(".seatDetails")[0]).hide();
+                $($(this).siblings(".trainDetails")[0]).show();
+                $(this).text("Seats");
+            }
+            else {
+                $(".showSeats").text("Seats");
+                $($(this).siblings(".seatDetails")[0]).show();
+                $($(this).siblings(".trainDetails")[0]).hide();
+                $(this).text("Trains");
+            }
+        });
+
+    </script>
+
+
 {% endblock %}
