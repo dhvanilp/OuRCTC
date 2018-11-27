@@ -19,7 +19,7 @@
     <ul>
         {% for train,sourceSchedule,destSchedule,scheduleCharts,fare in schedules %}
             <li class="col-sm-6 w3-card" style="width: 45%; height: 138px; margin: 2% 2.5%">
-            <button class="w3-button showSeats" style="float:right; margin-top:1%; margin-right: -1%; ">Seats</button>
+            <button class="w3-button showSeats" style="float:right; margin-top:1%; margin-right: -3%; ">Seats</button>
             <div class="trainDetails">
                 <h6 style="font-weight: bold;">{{ train }}</h6>
                 <table>
@@ -51,9 +51,10 @@
             </div>
             </li>
         {% endfor %}
+
     </ul>
-    <div>
-        <h5 style=" text-align: center;"><a href="{% url 'book:complexSearch' source.pk dest.pk date %}" style="font-weight: bold; color: blue;">Click here</a> to check intermidiate trains</h5>
+    <div class="container">
+        <h5 class="col-lg-12"  style=" text-align: center;"><a href="{% url 'book:complexSearch' source.pk dest.pk date %}" style="font-weight: bold; color: blue;">Click here</a> to check intermidiate trains</h5>
     </div>
     </div>
 

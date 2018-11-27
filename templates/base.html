@@ -30,7 +30,7 @@
     <a href="{% url 'book:home' %}" class="w3-bar-item w3-button w3-text-red w3-hover-red"><b><i
                     class="fa fa-map-marker w3-margin-right"></i>OuRCTC</b></a>
     {% block logout %}
-        {% if request.user != 'AnonymousUser' %}
+        {% if request.user != "AnonymousUser" %}
             <a class="w3-bar-item w3-button w3-text-red w3-hover-red" href="{% url 'accounts:logout' %}" style="float: right;">
                 <i class="fa fa-map-marker w3-margin-right fa-sign-out"></i>
             </a>

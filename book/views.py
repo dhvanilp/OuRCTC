@@ -34,6 +34,7 @@ def searchView(request):
         destTrains.append(s.train)
     allTrains=list(set(sourceTrains) & set(destTrains))
 
+
     trains=[]
     sourceSchedules=[]
     destSchedules=[]
