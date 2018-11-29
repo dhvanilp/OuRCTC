@@ -22,3 +22,30 @@ In the given project we will be developing a SQL Database which will help users 
 
 - Each region has a unique serial number(PK), name and the stations which fall under that region. One region may have more than one station.
 
+## Project Images
+1. Login Form
+<br>
+![](im1.png)
+<br><br>
+2. SignUp Form
+<br>
+![](im2.png)
+<br><br>
+3. Home Page
+![](im3.png)
+<br><br>
+4. Select From Map
+![](im4.png)
+<br><br>
+5. Display Trains
+![](im5.png)
+<br><br>
+6. Display Available Seats
+![](im6.png)
+<br><br>
+7. Display Connecting Trains
+![](im7.png)
+<br><br>
+8. Booked Ticket History
+![](im8.png)
+<br>
