@@ -24,37 +24,37 @@ In the given project we will be developing a SQL Database which will help users 
 
 ## Project Images
 
-### 1. Login Form
+#### 1. Login Form
 <div align="center">
   <img src="https://raw.githubusercontent.com/DhvanilP/OuRCTC/master/im1.png" />
 </div>
 
-### 2. SignUp Form
+#### 2. SignUp Form
 <div align="center">
   <img src="https://raw.githubusercontent.com/DhvanilP/OuRCTC/master/im2.png" />
 </div>
 
-### 3. Home Page
+#### 3. Home Page
 <div align="center">
   <img src="https://raw.githubusercontent.com/DhvanilP/OuRCTC/master/im3.png" />
 </div>
 
-### 4. Select From Map
+#### 4. Select From Map
 <div align="center">
   <img src="https://raw.githubusercontent.com/DhvanilP/OuRCTC/master/im4.png" />
 </div>
 
-# 5. Display Trains
+#### 5. Display Trains
 <div align="center">
   <img src="https://raw.githubusercontent.com/DhvanilP/OuRCTC/master/im5.png" />
 </div>
 
-### 6. Display Available Seats
+#### 6. Display Available Seats
 <div align="center">
   <img src="https://raw.githubusercontent.com/DhvanilP/OuRCTC/master/im6.png" />
 </div>
 
-### 7. Display Connecting Trains
+#### 7. Display Connecting Trains
 <div align="center">
   <img src="https://raw.githubusercontent.com/DhvanilP/OuRCTC/master/im7.png" />
 </div>
