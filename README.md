@@ -8,7 +8,7 @@ In the given project we will be developing a SQL Database which will help users 
 
 
 
-## Implementaion Details
+## Implementation Details
 
 - Users have a unique serial number (SN) used as primary key, name, email, phone, and adminship(decides if the user is an admin or not).
 
