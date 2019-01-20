@@ -7,7 +7,6 @@ The Indian Railways (IR) carries about 5.5 lakhs passengers in reserved accommod
 In the given project we will be developing a SQL Database which will help users to find train details, enquire about trains running between given two stations, book tickets and know the exact rates of their tickets to the desired destination. 
 
 
-
 ## Implementation Details
 
 - Users have a unique serial number (SN) used as primary key, name, email, phone, and adminship(decides if the user is an admin or not).
@@ -59,12 +58,14 @@ In the given project we will be developing a SQL Database which will help users 
   <img src="https://raw.githubusercontent.com/DhvanilP/OuRCTC/master/im7.png" />
 </div>
 
-### 8. Booked Ticket History
+#### 8. Booked Ticket History
 <div align="center">
   <img src="https://raw.githubusercontent.com/DhvanilP/OuRCTC/master/im8.png" />
 </div>
 
+
 ## Team Members
+
 * [Suyash Ghuge](https://github.com/suyash0103), 16IT114
 * [Nishant Kumar](https://github.com/NishantKr97),16IT123
 * [Shreyas Shankar](https://github.com/shrey920), 16IT138
